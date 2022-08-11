@@ -1,13 +1,11 @@
-from django.test import TestCase
+from rest_framework.test import APITestCase
 
-class TestGetAllDespesas(TestCase):
-    def setUp(self) -> None:
-        pass
-    
+
+class TestGetAllDespesas(APITestCase):
+    URL = "/api/v1/despesas/"
     
     def test_true(self):
-        self.assertTrue(True)
+        response = self.client.get(self.URL, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {"message": "ok"})
     
-    
-    def tearDown(self) -> None:
-        pass
