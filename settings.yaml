@@ -1,8 +1,7 @@
 default:
+    server: localhost
 
     ALLOWED_HOSTS:
-        - 'localhost'
-        - '127.0.0.1'
         - '*'
 
     INSTALLED_APPS:
@@ -25,10 +24,16 @@ default:
 
     DEBUG: true
 
+    AUTH_PASSWORD_VALIDATORS:
+        - NAME: django.contrib.auth.password_validation.UserAttributeSimilarityValidator
+        - NAME: django.contrib.auth.password_validation.MinimumLengthValidator
+        - NAME: django.contrib.auth.password_validation.CommonPasswordValidator
+        - NAME: django.contrib.auth.password_validation.NumericPasswordValidator
+
     DATABASES:
-        - 'default':
+        default:
             ENGINE: django.db.backends.sqlite3
-            NAME: BASE_DIR / 'db.sqlite3'
+            NAME: db.sqlite3
 
     ROOT_URLCONF: controle_financeiro.urls
 
@@ -42,19 +47,23 @@ default:
 
     USE_TZ: true
 
-    STATIC_URL: 'static/'
+    STATIC_URL: /static/
 
     DEFAULT_AUTO_FIELD: 'django.db.models.BigAutoField' 
 
 testing:
 
     DATABASES:
-        - 'default':
+        default:
             ENGINE: django.db.backends.sqlite3
-            NAME: BASE_DIR / 'testdb.sqlite3'
+            NAME: testdb.sqlite3
 
 production:
 
-    ALLOWED_HOSTS:
-        - 'server.prod.com'
+    server: server.prod.com
 
+    # DATABASES:
+    #     default:
+    #         ENGINE: django.db.backends.sqlite3
+    #         NAME: 
+    #             - ./testdb.sqlite3
