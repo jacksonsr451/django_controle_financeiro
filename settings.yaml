@@ -1,0 +1,60 @@
+default:
+
+    ALLOWED_HOSTS:
+        - 'localhost'
+        - '127.0.0.1'
+        - '*'
+
+    INSTALLED_APPS:
+        - django.contrib.admin
+        - django.contrib.auth
+        - django.contrib.contenttypes
+        - django.contrib.sessions
+        - django.contrib.messages
+        - django.contrib.staticfiles
+        - rest_framework
+
+    MIDDLEWARE:
+        - django.middleware.security.SecurityMiddleware
+        - django.contrib.sessions.middleware.SessionMiddleware
+        - django.middleware.common.CommonMiddleware
+        - django.middleware.csrf.CsrfViewMiddleware
+        - django.contrib.auth.middleware.AuthenticationMiddleware
+        - django.contrib.messages.middleware.MessageMiddleware
+        - django.middleware.clickjacking.XFrameOptionsMiddleware
+
+    DEBUG: true
+
+    DATABASES:
+        - 'default':
+            ENGINE: django.db.backends.sqlite3
+            NAME: BASE_DIR / 'db.sqlite3'
+
+    ROOT_URLCONF: controle_financeiro.urls
+
+    WSGI_APPLICATION: controle_financeiro.wsgi.application
+
+    LANGUAGE_CODE: 'pt-BR'
+
+    TIME_ZONE: 'UTC'
+
+    USE_I18N: true
+
+    USE_TZ: true
+
+    STATIC_URL: 'static/'
+
+    DEFAULT_AUTO_FIELD: 'django.db.models.BigAutoField' 
+
+testing:
+
+    DATABASES:
+        - 'default':
+            ENGINE: django.db.backends.sqlite3
+            NAME: BASE_DIR / 'testdb.sqlite3'
+
+production:
+
+    ALLOWED_HOSTS:
+        - 'server.prod.com'
+
