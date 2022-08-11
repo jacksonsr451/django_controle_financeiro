@@ -1,3 +1,13 @@
 from django.test import TestCase
 
-# Create your tests here.
+class TestGetAllDespesas(TestCase):
+    def setUp(self) -> None:
+        pass
+    
+    
+    def test_true(self):
+        self.assertTrue(True)
+    
+    
+    def tearDown(self) -> None:
+        pass
