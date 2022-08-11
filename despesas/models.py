@@ -1,20 +1,14 @@
 from django.db import models
 
 
-class Despesas(models.Model):
+class DespesasModel(models.Model):
     id = models.AutoField(primary_key=True)
-    descricao = models.TextField(null=False)
+    descricao = models.CharField(max_length=255, null=False)
     valor = models.FloatField(null=False)
     data = models.DateTimeField(null=False)
     
     
     class Meta:
-        ordering = ['id', 'descricao', 'valor', 'data']
+        db_table = "despesas"
     
-    
-    def __init__(self, descricao=None, valor=None, data=None, *args, **kwargs) -> None:
-        self.descricao = descricao
-        self.valor = valor
-        self.data = data
-        
     
