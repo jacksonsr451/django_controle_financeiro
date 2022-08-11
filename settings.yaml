@@ -4,6 +4,8 @@ default:
     ALLOWED_HOSTS:
         - '*'
 
+    DEBUG: true
+    
     INSTALLED_APPS:
         - django.contrib.admin
         - django.contrib.auth
@@ -24,8 +26,6 @@ default:
         - django.contrib.auth.middleware.AuthenticationMiddleware
         - django.contrib.messages.middleware.MessageMiddleware
         - django.middleware.clickjacking.XFrameOptionsMiddleware
-
-    DEBUG: true
 
     AUTH_PASSWORD_VALIDATORS:
         - NAME: django.contrib.auth.password_validation.UserAttributeSimilarityValidator
