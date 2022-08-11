@@ -12,6 +12,9 @@ default:
         - django.contrib.messages
         - django.contrib.staticfiles
         - rest_framework
+        - despesas
+        - receitas
+        - resumo
 
     MIDDLEWARE:
         - django.middleware.security.SecurityMiddleware
