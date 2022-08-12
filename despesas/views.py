@@ -8,12 +8,14 @@ from .despesa_serializer import DespesaSerializer
 
 class Despesas(APIView):
     def get(self, request) -> Response:
-        try:
+        despesas = DespesasModel.objects.all()
+        if len(despesas) >= 1:
+            serializer = DespesaSerializer(despesas, many=True)
             return Response(
                 status=status.HTTP_200_OK,
-                data=DespesaSerializer(data=DespesasModel.objects.all(), many=True).data
+                data=serializer.data
             )
-        except:
+        else:
             return Response(status=status.HTTP_400_BAD_REQUEST, 
                             data={"error": "Não há dados cadastrados!"})
         
