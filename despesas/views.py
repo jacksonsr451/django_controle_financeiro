@@ -11,12 +11,8 @@ class Despesas(APIView):
         despesas = DespesasModel.objects.all()
         if len(despesas) >= 1:
             serializer = DespesaSerializer(despesas, many=True)
-            return Response(
-                status=status.HTTP_200_OK,
-                data=serializer.data
-            )
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST, 
+            return Response(status=status.HTTP_200_OK,data=serializer.data)
+        else: return Response(status=status.HTTP_400_BAD_REQUEST, 
                             data={"error": "Não há dados cadastrados!"})
         
 
@@ -27,3 +23,21 @@ class Despesas(APIView):
             return Response(status=status.HTTP_200_OK, data={"message": "Dados inseridos com sucesso!"})
         return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "Dados não inseridos com sucesso!"})
 
+
+class DespesasByID(APIView):
+    def get(self, request, id):
+        try:
+            despesas = DespesasModel.objects.get(id=id)
+            serializer = DespesaSerializer(despesas)
+            return Response(status=status.HTTP_200_OK,data=serializer.data)
+        except: return Response(status=status.HTTP_400_BAD_REQUEST, 
+                            data={"error": "Não há dados cadastrados para o id: {}!".format(id)})
+
+
+
+    def delete(self, request, id):
+        if len(DespesasModel.objects.filter(id=id)) is not 0:
+            DespesasModel.objects.filter(id=id).delete()
+            return Response({"message": "Dados deletados com sucesso!"})
+        else:
+            return Response({"error": "Dados não encontrados para id: {}!".format(id)})

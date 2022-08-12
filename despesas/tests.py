@@ -34,13 +34,50 @@ class TestCreateDespesas(APITestCase):
         
     
     def test_should_be_return_error_duplicate_data(self):
-        data = datetime.now()
         self.client.post(self.URL, data={
-            "descricao": "Primeira despesa", "valor": 1250.00, "data": data
+            "descricao": "Primeira despesa", "valor": 1250.00, "data": "2022-08-11 20:18:50"
         })
         response = self.client.post(self.URL, data={
-            "descricao": "Primeira despesa", "valor": 2500.00, "data": data
+            "descricao": "Primeira despesa", "valor": 2500.00, "data": "2022-08-12 20:18:50"
         })
         value = {"error": "Dados não inseridos com sucesso!"}
         self.assertEqual(value, response.data)
         self.assertEqual(response.status_code, 400)
+
+
+class TestDespesasGetByID(APITestCase):
+    URL = "/api/v1/despesas/"
+        
+    def test_should_be_get_despesas_by_id(self):
+        data = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.client.post(self.URL, data={
+            "descricao": "Primeira despesa", "valor": 1250.00, "data": data
+        })
+        response = self.client.get(self.URL + "1/", format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["id"], 1)
+        self.assertEqual(response.data["descricao"], "Primeira despesa")
+        self.assertEqual(response.data["valor"], 1250.00)
+        self.assertEqual(response.data["data"].replace("T", " ").replace("Z", ""), data)
+    
+    
+    def test_should_return_error(self):
+        response = self.client.get(self.URL + "1/", format='json')
+        self.assertEqual({"error": "Não há dados cadastrados para o id: 1!"}, response.data)
+
+
+class TestDelete(APITestCase):
+    URL = "/api/v1/despesas/"
+    
+    def test_should_be_delete_and_return_value(self):
+        data = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.client.post(self.URL, data={
+            "descricao": "Primeira despesa", "valor": 1250.00, "data": data
+        })
+        response = self.client.delete(self.URL + "1/", format='json')
+        self.assertEqual({"message": "Dados deletados com sucesso!"}, response.data)
+
+    
+    def test_should_be_delete_return_error(self):
+        response = self.client.delete(self.URL + "1/", format='json')
+        self.assertEqual({"error": "Dados não encontrados para id: 1!"}, response.data)
