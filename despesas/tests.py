@@ -99,6 +99,6 @@ class TestUpdate(APITestCase):
             "descricao": "Primeira despesa", "valor": 1250.00, "data": data
         })
         response = self.client.put(self.URL + "1/", data={
-            "id": 1, "descricao": "Primeira despesa", "valor": 1250.00, "data": "2022-08-24 20:46:55"
+            "id": 1, "categoria": "Outras", "descricao": "Primeira despesa", "valor": 1250.00, "data": "2022-08-24 20:46:55"
         })
         self.assertEqual({"message": "Dados atualizados com sucesso!"}, response.data)

@@ -47,6 +47,7 @@ class DespesasByID(APIView):
         try:
             despesas = DespesasModel.objects.get(id=id)
             despesas.id = request.data.get("id")
+            despesas.categoria = request.data.get("categoria")
             despesas.descricao = request.data.get("descricao")
             despesas.valor = request.data.get("valor")
             despesas.data = request.data.get("data")
