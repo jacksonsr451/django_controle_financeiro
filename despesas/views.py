@@ -59,3 +59,11 @@ class DespesasByID(APIView):
             return Response({"message": "Dados atualizados com sucesso!"})
         except DespesasModel.DoesNotExist:
             return Response({"error": "Dados não encontrados para id: {}!".format(id)})
+
+
+class DespesasByAnoAndMes(APIView):
+    def get(self, request, ano, mes):
+        receitas = DespesasModel.objects.filter(data__contains="{}-{}".format(ano, mes))
+        if receitas.count() != 0:
+            return Response(data=DespesaSerializer(receitas, many=True).data)
+        else: return Response({"error": "Não há dados neste periodo de ano: {} e mês: {}.".format(ano, mes)})

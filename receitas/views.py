@@ -58,3 +58,11 @@ class ReceitasByID(APIView):
             return Response({"message": "Dados atualizados com sucesso!"})
         except ReceitasModel.DoesNotExist:
             return Response({"error": "Dados não encontrados para id: {}!".format(id)})
+
+
+class ReceitasByAnoAndMes(APIView):
+    def get(self, request, ano, mes):
+        receitas = ReceitasModel.objects.filter(data__contains="{}-{}".format(ano, mes))
+        if receitas.count() != 0:
+            return Response(data=ReceitasSerializer(receitas, many=True).data)
+        else: return Response({"error": "Não há dados neste periodo de ano: {} e mês: {}.".format(ano, mes)})
