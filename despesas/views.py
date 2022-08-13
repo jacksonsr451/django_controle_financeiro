@@ -8,9 +8,9 @@ from .despesa_serializer import DespesaSerializer
 
 class Despesas(APIView):
     def get(self, request) -> Response:
-        if request.data.get("descricao") is not None:
-            receitas = DespesasModel.objects.filter(descricao="{}".format(request.data.get("descricao")))
-            return Response(DespesaSerializer(receitas, many=True))
+        if request.GET.get("descricao") is not None:
+            receitas = DespesasModel.objects.filter(descricao__contains="{}".format(request.GET.get("descricao")))
+            return Response(data=DespesaSerializer(receitas, many=True).data)
         else:
             despesas = DespesasModel.objects.all()
             if len(despesas) >= 1:

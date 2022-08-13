@@ -8,9 +8,9 @@ from .receitas_serializer import ReceitasSerializer
 
 class Receitas(APIView):
     def get(self, request) -> Response:
-        if request.data.get("descricao") is not None:
-            receitas = ReceitasModel.objects.filter(descricao="{}".format(request.data.get("descricao")))
-            return Response(ReceitasSerializer(receitas, many=True))
+        if request.GET.get("descricao") is not None:
+            receitas = ReceitasModel.objects.filter(descricao__contains="{}".format(request.GET.get("descricao")))
+            return Response(data=ReceitasSerializer(receitas, many=True).data)
         else:
             receitas = ReceitasModel.objects.all()
             if len(receitas) >= 1:
