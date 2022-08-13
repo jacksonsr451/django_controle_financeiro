@@ -8,9 +8,9 @@ from .despesa_serializer import DespesaSerializer
 
 class Despesas(APIView):
     def get(self, request) -> Response:
-        if request.data.get("descricao") is not None:
-            receitas = DespesasModel.objects.filter(descricao="{}".format(request.data.get("descricao")))
-            return Response(DespesaSerializer(receitas, many=True))
+        if request.GET.get("descricao") is not None:
+            receitas = DespesasModel.objects.filter(descricao__contains=request.GET.get("descricao"))
+            return Response(data=DespesaSerializer(receitas, many=True).data)
         else:
             despesas = DespesasModel.objects.all()
             if len(despesas) >= 1:
@@ -40,7 +40,7 @@ class DespesasByID(APIView):
 
 
     def delete(self, request, id):
-        if len(DespesasModel.objects.filter(id=id)) is not 0:
+        if len(DespesasModel.objects.filter(id=id)) != 0:
             DespesasModel.objects.filter(id=id).delete()
             return Response({"message": "Dados deletados com sucesso!"})
         else:
@@ -59,3 +59,11 @@ class DespesasByID(APIView):
             return Response({"message": "Dados atualizados com sucesso!"})
         except DespesasModel.DoesNotExist:
             return Response({"error": "Dados não encontrados para id: {}!".format(id)})
+
+
+class DespesasByAnoAndMes(APIView):
+    def get(self, request, ano, mes):
+        receitas = DespesasModel.objects.filter(data__contains="{}-{}".format(ano, mes))
+        if receitas.count() != 0:
+            return Response(data=DespesaSerializer(receitas, many=True).data)
+        else: return Response({"error": "Não há dados neste periodo de ano: {} e mês: {}.".format(ano, mes)})

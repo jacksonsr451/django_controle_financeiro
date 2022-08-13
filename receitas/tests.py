@@ -1,5 +1,4 @@
 from datetime import datetime
-from time import strftime
 from rest_framework.test import APITestCase
 
 
@@ -122,3 +121,35 @@ class TestUpdate(APITestCase):
             "id": 1, "descricao": "Primeira receita", "valor": 1250.00, "data": "2022-08-24 20:46:55"
         })
         self.assertEqual({"message": "Dados atualizados com sucesso!"}, response.data)
+        
+
+class TestFilterByAnoAndMes(APITestCase):
+    URL = "/api/v1/receitas/"
+    
+    
+    def test_should_be_return_list_by_ano_and_mes(self):
+        self.add_values_id_db()
+        response = self.client.get(self.URL + "2022/01/", format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        
+        
+
+    def add_values_id_db(self) -> None:
+        self.client.post(self.URL, data={
+            "descricao": "Primeira receita de agosto", "valor": 1250.00, "data": "2022-08-13 15:25:55"
+        })
+        self.client.post(self.URL, data={
+            "descricao": "Primeira receita de julho", "valor": 1250.00, "data": "2022-07-13 15:25:55"
+        })
+        self.client.post(self.URL, data={
+            "descricao": "Segunda receita de julho", "valor": 1250.00, "data": "2022-07-13 15:25:55"
+        })
+        self.client.post(self.URL, data={
+            "descricao": "Primeira receita de janeiro", "valor": 1250.00, "data": "2022-01-13 15:25:55"
+        })
+        
+    
+    def test_should_be_return_message_error(self):
+        response = self.client.get(self.URL + "2022/01/", format='json')
+        self.assertEqual(response.data, {"error": "Não há dados neste periodo de ano: 2022 e mês: 01."})
