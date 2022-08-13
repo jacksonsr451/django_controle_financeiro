@@ -9,7 +9,7 @@ from .despesa_serializer import DespesaSerializer
 class Despesas(APIView):
     def get(self, request) -> Response:
         if request.GET.get("descricao") is not None:
-            receitas = DespesasModel.objects.filter(descricao__contains="{}".format(request.GET.get("descricao")))
+            receitas = DespesasModel.objects.filter(descricao__contains=request.GET.get("descricao"))
             return Response(data=DespesaSerializer(receitas, many=True).data)
         else:
             despesas = DespesasModel.objects.all()
@@ -40,7 +40,7 @@ class DespesasByID(APIView):
 
 
     def delete(self, request, id):
-        if len(DespesasModel.objects.filter(id=id)) is not 0:
+        if len(DespesasModel.objects.filter(id=id)) != 0:
             DespesasModel.objects.filter(id=id).delete()
             return Response({"message": "Dados deletados com sucesso!"})
         else:

@@ -9,7 +9,7 @@ from .receitas_serializer import ReceitasSerializer
 class Receitas(APIView):
     def get(self, request) -> Response:
         if request.GET.get("descricao") is not None:
-            receitas = ReceitasModel.objects.filter(descricao__contains="{}".format(request.GET.get("descricao")))
+            receitas = ReceitasModel.objects.filter(descricao__contains=request.GET.get("descricao"))
             return Response(data=ReceitasSerializer(receitas, many=True).data)
         else:
             receitas = ReceitasModel.objects.all()
@@ -40,7 +40,7 @@ class ReceitasByID(APIView):
 
 
     def delete(self, request, id):
-        if len(ReceitasModel.objects.filter(id=id)) is not 0:
+        if len(ReceitasModel.objects.filter(id=id)) != 0:
             ReceitasModel.objects.filter(id=id).delete()
             return Response({"message": "Dados deletados com sucesso!"})
         else:
