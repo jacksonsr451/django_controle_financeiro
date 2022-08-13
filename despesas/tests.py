@@ -81,3 +81,18 @@ class TestDelete(APITestCase):
     def test_should_be_delete_return_error(self):
         response = self.client.delete(self.URL + "1/", format='json')
         self.assertEqual({"error": "Dados não encontrados para id: 1!"}, response.data)
+
+
+class TestUpdate(APITestCase):
+    URL = "/api/v1/despesas/"
+    
+    def test_should_be_update_and_return_value(self):
+        data = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.client.post(self.URL, data={
+            "descricao": "Primeira despesa", "valor": 1250.00, "data": data
+        })
+        response = self.client.put(self.URL + "1/", data={
+            "id": 1, "descricao": "Primeira despesa", "valor": 1250.00, "data": "2022-08-24 20:46:55"
+        })
+        self.assertEqual({"message": "Dados atualizados com sucesso!"}, response.data)
+        

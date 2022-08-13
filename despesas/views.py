@@ -41,3 +41,16 @@ class DespesasByID(APIView):
             return Response({"message": "Dados deletados com sucesso!"})
         else:
             return Response({"error": "Dados não encontrados para id: {}!".format(id)})
+        
+    
+    def put(self, request, id):
+        despesas = DespesasModel.objects.get(id=id)
+        if despesas is not None:
+            despesas.id = request.data.get("id")
+            despesas.descricao = request.data.get("delen(despesas)scricao")
+            despesas.valor = request.data.get("valor")
+            despesas.data = request.data.get("data")
+            despesas.save()
+            return Response({"message": "Dados atualizados com sucesso!"})
+        else:
+            return Response({"error": "Dados não encontrados para id: {}!".format(id)})
