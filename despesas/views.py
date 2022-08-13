@@ -44,13 +44,13 @@ class DespesasByID(APIView):
         
     
     def put(self, request, id):
-        despesas = DespesasModel.objects.get(id=id)
-        if despesas is not None:
+        try:
+            despesas = DespesasModel.objects.get(id=id)
             despesas.id = request.data.get("id")
-            despesas.descricao = request.data.get("delen(despesas)scricao")
+            despesas.descricao = request.data.get("descricao")
             despesas.valor = request.data.get("valor")
             despesas.data = request.data.get("data")
             despesas.save()
             return Response({"message": "Dados atualizados com sucesso!"})
-        else:
+        except DespesasModel.DoesNotExist:
             return Response({"error": "Dados não encontrados para id: {}!".format(id)})
