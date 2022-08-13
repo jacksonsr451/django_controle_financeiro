@@ -8,12 +8,16 @@ from .receitas_serializer import ReceitasSerializer
 
 class Receitas(APIView):
     def get(self, request) -> Response:
-        receitas = ReceitasModel.objects.all()
-        if len(receitas) >= 1:
-            serializer = ReceitasSerializer(receitas, many=True)
-            return Response(status=status.HTTP_200_OK,data=serializer.data)
-        else: return Response(status=status.HTTP_400_BAD_REQUEST, 
-                            data={"error": "Não há dados cadastrados!"})
+        if request.data.get("descricao") is not None:
+            receitas = ReceitasModel.objects.filter(descricao="{}".format(request.data.get("descricao")))
+            return Response(ReceitasSerializer(receitas, many=True))
+        else:
+            receitas = ReceitasModel.objects.all()
+            if len(receitas) >= 1:
+                serializer = ReceitasSerializer(receitas, many=True)
+                return Response(status=status.HTTP_200_OK,data=serializer.data)
+            else: return Response(status=status.HTTP_400_BAD_REQUEST, 
+                                data={"error": "Não há dados cadastrados!"})
         
 
     def post(self, request) -> Response:
